@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор конкурсного балу ХНАДУ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+      /****** RESET *******/
+      *,
+      *::before,
+      *::after{box-sizing:border-box;}
+      a{text-decoration:none; color:inherit; cursor:pointer;}
+      button{background-color:transparent; color:inherit; border-width:0; padding:0; cursor:pointer;}
+      figure{margin:0;}
+      input::-moz-focus-inner {border:0; padding:0; margin:0;}
+      ul, ol, dd{margin:0; padding:0; list-style:none;}
+      h1, h2, h3, h4, h5, h6{margin:0; font-size:inherit; font-weight:inherit;}
+      p{margin:0;}
+      cite {font-style:normal;}
+      fieldset{border-width:0; padding:0; margin:0;}
+      img{display:block;}
+      html {scroll-behavior: smooth;}
+      /******  END OF RESET *******/
+      :root {
+        --main-font: 'Roboto','Arial', sans-serif;
+        --main-font-size: 62.5%;
+        --main-font-color: #000;
+        --background-color: #AEFCA4;
+        --background-color-secondary: #C2D3E8;
+        --background-color-tertiary: #E9FD73;
+        --span-color: #FF0000;
+        --border: 2px solid #000;
+      }
+      html {
+        font-family: var(--main-font);
+        font-size: var(--main-font-size);
+        color: var(--main-font-color);
+        background-color: #F2F2F2;
+        text-align: center;
+      }
+      body {
+        font-size: 1.6rem;
+      }
+      span {
+        color: var(--span-color)
+      }
+      .main {
+        width: 100%;
+        height: 100%;
+      }
+      .main__wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        border: var(--border)
+      }
+      .title {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        min-height: 60px;
+        margin-bottom: 20px;
+        padding: 10px 20px;
+        background-color: var(--background-color);
+        border: var(--border)
+      }
+      .title__heading {
+        font-size: 1.8rem;
+      }
+      .results-info {
+        position: relative;
+        width: 100%;
+        min-height: 60px;
+        margin-bottom: 20px;
+        padding: 10px 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        background-color: var(--background-color);
+        border: var(--border);
+        z-index: 1;
+      }
+      .results-info svg {
+        width: 60px;
+        height: 60px;
+        position: absolute;
+        left: calc(50% - 30px);
+        bottom: -40px;
+      }
+      .results-info__heading {
+        font-size: 1.8rem;
+      }
+      .subjects {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+        padding: 20px;
+        border: var(--border)
+      }
+      .subjects__container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1%;
+        margin-bottom: 20px;
+      }
+      .subjects__mandatory {
+        width: 30%;
+      }
+      .subjects__mandatory label {
+        min-height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--background-color-secondary);
+        border: var(--border)
+      }
+      .subjects__mandatory input {
+        font-size: 1.8rem; 
+        min-height: 40px;
+        text-align: center;
+        border: solid #000;
+        border-width: 1px 2px 2px 2px; 
+      }
+      .subjects__mandatory input.empty {
+        background-color: #ff0e0e;
+        color: #fff;
+      }
+      .subjects__mandatory input::placeholder {
+        font-size: 1.6rem; 
+      }
+      .subjects__mandatory input.empty::placeholder {
+        font-size: 1.6rem; 
+        color: #fff;
+      }
+      .subjects__mandatory-container {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        gap: 1%;
+      }
+      .subjects__mandatory-title {
+        background-color: var(--background-color);
+        min-height: 30px;
+        margin-bottom: 10px;
+        padding: 5px 10px;
+
+        border: var(--border)
+      }
+      .subjects__mandatory-ukr,
+      .subjects__mandatory-math,
+      .subjects__mandatory-history {
+        width: 100%;
+        min-height: 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+      }
+      .subjects__elective {
+        width: 69%;
+      }
+      .subjects__elective label {
+        min-height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--background-color-tertiary);
+        border: var(--border)
+      }
+      .subjects__elective input { 
+        font-size: 1.8rem; 
+        min-height: 40px;
+        text-align: center;
+        border: solid #000;
+        border-width: 1px 2px 2px 2px; 
+      }
+      .subjects__elective input.empty {
+        background-color: #ff0e0e;
+        color: #fff;
+      }
+      .subjects__elective input::placeholder {
+        font-size: 1.6rem; 
+      }
+      .subjects__elective input.empty::placeholder {
+        font-size: 1.6rem; 
+        color: #fff;
+      }
+      .subjects__elective-container {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        gap: 1%;
+      }
+      .subjects__elective-title {
+        background-color: var(--background-color);
+        min-height: 30px;
+        margin-bottom: 10px;
+        padding: 5px 10px;
+        border: var(--border)
+      }
+      .subjects__elective-literature,
+      .subjects__elective-geo,
+      .subjects__elective-foreign,
+      .subjects__elective-bio,
+      .subjects__elective-physics,
+      .subjects__elective-chemistry {
+        width: 100%;
+        min-height: 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+      }
+      .subjects__courses {
+        display: flex;
+        gap: 1%;
+        margin-bottom: 20px;
+      }
+      .subjects__courses-title {
+        width: 77%;
+        min-height: 40px;
+        padding: 5px 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: var(--border);
+        background-color: var(--background-color);
+      }
+      .subjects__select {
+        width: 22%;
+        border: var(--border);
+        font-size: 1.8rem;
+        text-align-last: center;
+      }
+      .subjects__select option {
+        text-align: center;
+      }
+      .subjects__competition {
+        display: flex;
+        gap: 1%;
+      }
+      .subjects__competition label {
+        width: 77%;
+        min-height: 40px;
+        padding: 5px 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: var(--border);
+        background-color: var(--background-color);
+      }
+      #competition {
+        width: 22%;
+        border: var(--border);
+        font-size: 1.8rem;
+        text-align: center;
+      }
+      #competition.empty {
+        background-color: #FF0000;
+        color: #fff;
+      }
+      #competition.empty::placeholder {
+        color: #fff;
+      }
+      .description {
+        position: relative;
+        width: 100%;
+        min-height: 40px;
+        margin-bottom: 20px;
+        padding: 5px 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--background-color);
+        border: var(--border)
+      }
+      .description svg {
+        width: 60px;
+        height: 60px;
+        position: absolute;
+        left: calc(50% - 30px);
+        bottom: -40px;
+      }
+      .specialty {
+        width: 100%;
+        display: flex;
+        gap: 1%;
+        padding: 20px;
+        border: var(--border);
+      }
+      .specialty__container {
+        width: 77%;
+        display: flex;
+        flex-direction: column;
+      }
+      .specialty__description {
+        position: relative;
+        min-height: 40px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: var(--border);
+        background-color: var(--background-color);
+      }
+      .specialty__description svg {
+        width: 60px;
+        height: 60px;
+        position: absolute;
+        left: calc(50% - 30px);
+        bottom: -40px;
+      }
+      .specialty__heading {
+        font-size: 1.8rem;
+      }
+      .specialty__selection {
+        min-height: 80px;
+        display: flex;
+        justify-content: center;
+        text-align-last: center;
+      }
+      .specialty__answer {
+        width: 100%;
+        font-size: 1.8rem;
+        border: var(--border);
+        background-color: var(--background-color-secondary);
+      }
+      .specialty__wrapper {
+        position: relative;
+      }
+      .specialty__wrapper svg {
+        width: 60px;
+        height: 60px;
+        position: absolute;
+        left: calc(50% - 30px);
+        top: 18px;
+      }
+
+      .specialty__score {
+        position: relative;
+        width: 22%;
+        display: flex;
+        flex-direction: column;
+      }
+      #specialty__score {
+        text-align: center;
+        font-size: 2.2rem;
+        min-height: 80px;
+        border: var(--border);
+      }   
+      .specialty__score label {
+        min-height: 40px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.8rem;
+        border: var(--border);
+        background-color: var(--background-color);
+      }
+      #specialty__score.error {
+        color: #fff;
+        background-color: #FF0000;
+      }
+      @media (max-width: 1000px) {
+        body {
+          font-size: 1.5rem;
+        }
+        .info__heading,
+        .specialty__heading,
+        .results-info__heading {
+          font-size: 1.6rem;
+        }
+        .subjects__container {
+          flex-direction: column;
+        }
+        .subjects__mandatory {
+          width: 100%;
+          margin-bottom: 10px;
+        }
+        .subjects__elective {
+          width: 100%;
+        }
+        input::placeholder {
+          font-size: 1.5rem !important;
+        }
+        .specialty__score label {
+          font-size: 1.6rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        body {
+          font-size: 1.4rem;
+        }
+        .info__heading,
+        .specialty__heading,
+        .results-info__heading,
+        .specialty__score label {
+          font-size: 1.5rem;
+        }
+        .title {
+          margin-bottom: 10px;
+        }
+        .main__wrapper {
+          padding: 10px;
+        }
+        .subjects {
+          padding: 10px;
+        }
+        .results-info {
+          display: none;
+        }
+        input::placeholder {
+          font-size: 1.3rem !important;
+        }
+        .subjects__container {
+          margin-bottom: 10px;
+        }
+        .subjects__courses {
+          margin-bottom: 10px;
+        }
+
+        .subjects__mandatory-ukr,
+        .subjects__mandatory-math,
+        .subjects__mandatory-history {
+          min-height: 60px;
+        }
+        .subjects__mandatory label {
+          min-height: 40px;
+        }
+        .subjects__mandatory input { 
+          min-height: 30px;
+        }
+        .subjects__elective-literature,
+        .subjects__elective-geo,
+        .subjects__elective-foreign,
+        .subjects__elective-bio,
+        .subjects__elective-physics,
+        .subjects__elective-chemistry {
+          min-height: 60px;
+        }
+        .subjects__elective label { 
+          min-height: 40px;
+        }
+        .subjects__elective input { 
+          min-height: 30px;
+        }
+        .subjects__select {
+          font-size: 1.6rem;
+        }
+        .specialty {
+          padding: 10px;
+        }
+        .specialty__selection {
+          min-height: 50px;
+        }
+        .specialty__answer {
+          font-size: 1.6rem;
+        }
+        #specialty__score {
+          min-height: 50px;
+        }
+
+      }
+      @media (max-width: 560px) {
+        body {
+          font-size: 1.4rem;
+        }
+        .info__heading,
+        .specialty__heading,
+        .results-info__heading {
+          font-size: 1.5rem;
+        }
+        .title {
+          min-height: 40px;
+        }
+        .subjects {
+          padding: 0;
+          border: none;
+        }
+        .subjects__mandatory-ukr,
+        .subjects__mandatory-math,
+        .subjects__mandatory-history {
+          min-height: 30px;
+        }
+        .subjects__mandatory label {
+          min-height: 40px;
+        }
+        .subjects__mandatory input { 
+          min-height: 30px;
+        }
+        .subjects__elective-container {
+          flex-wrap: wrap;
+          gap: 1%;
+        }
+        .subjects__elective-literature,
+        .subjects__elective-geo,
+        .subjects__elective-foreign,
+        .subjects__elective-bio,
+        .subjects__elective-physics,
+        .subjects__elective-chemistry {
+          min-height: 40px;
+          width: 49%;
+          margin-bottom: 5px;
+        }
+        .subjects__elective label { 
+          min-height: 40px;
+        }
+        .subjects__elective input { 
+          min-height: 30px;
+        }
+        .subjects__select {
+          font-size: 1.6rem;
+        }
+        .subjects__courses-title {
+          min-height: 20px;
+        }
+        .description {
+          margin-bottom: 10px;
+          display: none;
+        }
+        input::placeholder {
+          font-size: 1.3rem !important;
+        }
+        .specialty__container {
+          width: 70%;
+        }
+        .specialty__selection {
+          min-height: 50px;
+        }
+        .specialty__answer {
+          font-size: 1.4rem;
+        }
+        .specialty__score {
+          min-height: 30px;
+          width: 30%;
+        }
+        .specialty__description {
+          min-height: 50px;
+        }
+        .specialty__score label{
+          min-height: 50px;
+        }
+        #specialty__score {
+          font-size: 1.6rem;
+        }
+        .specialty__wrapper svg {
+          top: 28px;
+        }
+      }
+      @media (max-width: 400px) {
+        .specialty__score label {
+          font-size: 1.3rem;
+        }
+      }
+    </style>
+</head>
+<body>
+  <main class="main" id="main">
+    <div class="main__wrapper">
+    <div class="title">
+      <h1 class="title__heading">Калькулятор <span class="title__span">конкурсного балу</span> ХНАДУ</h1>
+    </div>
+    <div class="results-info">
+        <h2 class="results-info__heading">Введи свої <span class="results-info__span">результати НМТ 2025 року</span></h2>
+        <p class="results-info__description">(за 200-бальною шкалою)</p>
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M17.9188 8.17969H11.6888H6.07877C5.11877 8.17969 4.63877 9.33969 5.31877 10.0197L10.4988 15.1997C11.3288 16.0297 12.6788 16.0297 13.5088 15.1997L15.4788 13.2297L18.6888 10.0197C19.3588 9.33969 18.8788 8.17969 17.9188 8.17969Z" fill="#008015"></path> </g></svg>
+    </div>
+    <div class="subjects">
+      <div class="subjects__container">
+        <div class="subjects__mandatory">
+          <div class="subjects__mandatory-title"> 
+            <h2 class="subject__mandatory-heading">Обов'язкові предмети</h2>
+          </div>
+          <div class="subjects__mandatory-container">
+            <div class="subjects__mandatory-ukr">
+              <label for="ukr">Українська мова:</label>
+              <input class='empty' type="number" id="ukr" min="100" max="200" placeholder="Введіть бал">
+            </div>
+            <div class="subjects__mandatory-math">
+              <label for="math">Математика:</label>
+              <input class='empty' type="number" id="math" min="100" max="200" placeholder="Введіть бал">
+            </div>
+            <div class="subjects__mandatory-history">
+              <label for="history">Історія України:</label>
+              <input class='empty' type="number" id="history" min="100" max="200" placeholder="Введіть бал">
+            </div>
+          </div>
+        </div>
+        <div class="subjects__elective">
+          <div class="subjects__elective-title">
+            <h2 class="subjects__elective-heading">Предмети на вибір</h2>
+          </div>
+          <div class="subjects__elective-container">
+            <div class="subjects__elective-literature">
+              <label for="literature">Українська література:</label>
+              <input class='empty' type="number" id="literature" min="100" max="200" placeholder="Введіть бал">
+            </div>
+            <div class="subjects__elective-geo">
+              <label for="geo">Географія:</label>
+              <input class='empty' type="number" id="geo" min="100" max="200" placeholder="Введіть бал">
+            </div>
+            <div class="subjects__elective-foreign">
+              <label for="foreign">Іноземна мова:</label>
+              <input class='empty' type="number" id="foreign" min="100" max="200" placeholder="Введіть бал">
+            </div>
+            <div class="subjects__elective-bio">
+              <label for="bio">Біологія:</label>
+              <input class='empty' type="number" id="bio" min="100" max="200" placeholder="Введіть бал">
+            </div>
+            <div class="subjects__elective-physics">
+              <label for="physics">Фізика:</label>
+              <input class='empty' type="number" id="physics" min="100" max="200" placeholder="Введіть бал">
+            </div>
+            <div class="subjects__elective-chemistry">
+              <label for="chemistry">Хімія:</label>
+              <input class='empty' type="number" id="chemistry" min="100" max="200" placeholder="Введіть бал">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="subjects__courses">
+        <div class="subjects__courses-title">
+          <h2 class="subjects__courses-heading">Чи проходив(ла) <span class="subjects__courses-span">підготовчі курси</span> в ХНАДУ в 2025 році?</h2>
+        </div>
+        <select class="subjects__select">
+          <option value="0">Ні</option>
+          <option value="1">Так</option>
+        </select>
+      </div>
+      <div class="subjects__competition">
+        <label for="competition">Оцінка за творчий конкурс (заповнюється тільки для спеціальність B2 Дизайн)</label>
+        <input type="number" id="competition" min="100" max="200" placeholder="Введіть бал" disabled>
+      </div>
+    </div>
+    <div class="description">
+      <h2 class="description__heading">Отримай свій <span class="description__span">конкурсний бал</span> для вступу за спеціальностями ХНАДУ (для заяв з 1-им або 2-им пріорітетом)</h2>
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M17.9188 8.17969H11.6888H6.07877C5.11877 8.17969 4.63877 9.33969 5.31877 10.0197L10.4988 15.1997C11.3288 16.0297 12.6788 16.0297 13.5088 15.1997L15.4788 13.2297L18.6888 10.0197C19.3588 9.33969 18.8788 8.17969 17.9188 8.17969Z" fill="#008015"></path> </g></svg>
+    </div>
+    <div class="specialty">
+      <div class="specialty__container">
+        <div class="specialty__description">
+          <h2 class="specialty__heading" >Обери спеціальність з переліку</h2>
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M17.9188 8.17969H11.6888H6.07877C5.11877 8.17969 4.63877 9.33969 5.31877 10.0197L10.4988 15.1997C11.3288 16.0297 12.6788 16.0297 13.5088 15.1997L15.4788 13.2297L18.6888 10.0197C19.3588 9.33969 18.8788 8.17969 17.9188 8.17969Z" fill="#008015"></path> </g></svg>
+        </div>
+        <div class="specialty__selection">
+          <select class="specialty__answer">
+            <option value="A5.32">A5 Професійна освіта (A5.32 Електроніка, метрологія та радіотелекомунікації) (015.32)</option>
+            <option value="A5.38">A5 Професійна освіта (A5.38 Транспорт) (015.38)</option>
+            <option value="B2">B2 Дизайн (022)</option>
+            <option value="B11.10">B11 Філологія (B11.10 Прикладна лінгвістика) (035.10)</option>
+            <option value="C1">C1 Економіка (051)</option>
+            <option value="C4">C4 Психологія (053)</option>
+            <option value="D1">D1 Облік i оподаткування (071)</option>
+            <option value="D3">D3 Менеджмент (073)</option>
+            <option value="D5">D5 Маркетинг (075)</option>
+            <option value="D7">D7 Торгівля (076)</option>
+            <option value="E2">E2 Екологія (101)</option>
+            <option value="F2">F2 Інженерія програмного забезпечення (121)</option>
+            <option value="F3">F3 Комп'ютерні науки (122)</option>
+            <option value="F5">F5 Кібербезпека та захист інформації (125)</option>
+            <option value="F6">F6 Інформаційні системи та технології (126)</option>
+            <option value="F7">F7 Комп'ютерна інженерія (123)</option>
+            <option value="G1">G1 Хімічні технології та інженерія</option>
+            <option value="G3">G3 Електрична інженерія (141)</option>
+            <option value="G6">G6 Автоматизація, комп'ютерно-інтегровані технології  та робототехніка (174)</option>
+            <option value="G7">G7 Інформаційно-вимірювальні технології (175)</option>
+            <option value="G8">G8 Матеріалознавство (132)</option>
+            <option value="G9">G9 Прикладна механіка (131)</option>
+            <option value="G11">G11 Машинобудування (133, 142)</option>
+            <option value="G18">G18 Геодезія та землеустрій (193)</option>
+            <option value="G19">G19 Будівництво та цивільна інженерія (192)</option>
+            <option value="J8">J8 Автомобільний транспорт (274, 275)</option>
+          </select>
+        </div>
+      </div>
+      <div class="specialty__score">
+        <div class="specialty__wrapper">
+          <label for="specialtyScore">Конкурсний бал:</label>
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M17.9188 8.17969H11.6888H6.07877C5.11877 8.17969 4.63877 9.33969 5.31877 10.0197L10.4988 15.1997C11.3288 16.0297 12.6788 16.0297 13.5088 15.1997L15.4788 13.2297L18.6888 10.0197C19.3588 9.33969 18.8788 8.17969 17.9188 8.17969Z" fill="#008015"></path> </g></svg>
+        </div>
+        <input id="specialty__score" type="text" name="specialtyScore" readonly>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+const specialties = {
+    "A5.32": [0.35, 0.5, 0.25, 0.3, 0.3, 0.4, 0.4, 0.2, 0.25, 10],
+    "A5.38": [0.35, 0.5, 0.25, 0.3, 0.3, 0.4, 0.4, 0.2, 0.25, 10],
+    "B2": [0.25, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0],
+    "B11.10": [0.5, 0.25, 0.25, 0.5, 0.2, 0.3, 0.3, 0.5, 0.25, 0],
+    "C1": [0.35, 0.4, 0.25, 0.25, 0.2, 0.3, 0.3, 0.25, 0.35, 0],
+    "C4": [0.35, 0.4, 0.25, 0.3, 0.4, 0.3, 0.3, 0.25, 0.25, 0],
+    "D1": [0.35, 0.4, 0.25, 0.25, 0.2, 0.3, 0.3, 0.25, 0.35, 0],
+    "D3": [0.35, 0.4, 0.25, 0.25, 0.2, 0.3, 0.3, 0.25, 0.35, 0],
+    "D5": [0.35, 0.4, 0.25, 0.25, 0.2, 0.3, 0.3, 0.25, 0.35, 0],
+    "D7": [0.35, 0.4, 0.25, 0.25, 0.2, 0.3, 0.3, 0.25, 0.35, 0],
+    "E2": [0.3, 0.35, 0.35, 0.3, 0.5, 0.45, 0.45, 0.3, 0.4, 0],
+    "F2": [0.3, 0.5, 0.2, 0.3, 0.2, 0.4, 0.3, 0.2, 0.2, 0],
+    "F3": [0.3, 0.5, 0.2, 0.3, 0.2, 0.4, 0.3, 0.2, 0.2, 0],
+    "F5": [0.3, 0.5, 0.2, 0.3, 0.2, 0.4, 0.3, 0.2, 0.2, 0],
+    "F6": [0.3, 0.5, 0.2, 0.3, 0.2, 0.4, 0.3, 0.2, 0.2, 0],
+    "F7": [0.3, 0.5, 0.2, 0.3, 0.2, 0.4, 0.3, 0.2, 0.2, 0],
+    "G1": [0.3, 0.5, 0.2, 0.3, 0.3, 0.3, 0.5, 0.2, 0.2, 10],
+    "G3": [0.3, 0.5, 0.2, 0.3, 0.2, 0.5, 0.3, 0.2, 0.2, 10],
+    "G6": [0.3, 0.5, 0.2, 0.3, 0.2, 0.5, 0.3, 0.2, 0.2, 10],
+    "G7": [0.3, 0.5, 0.2, 0.3, 0.2, 0.5, 0.3, 0.2, 0.2, 10],
+    "G8": [0.3, 0.5, 0.2, 0.3, 0.2, 0.5, 0.5, 0.2, 0.2, 10],
+    "G9": [0.3, 0.5, 0.2, 0.3, 0.2, 0.5, 0.3, 0.2, 0.2, 10],
+    "G11": [0.3, 0.5, 0.2, 0.3, 0.2, 0.5, 0.3, 0.2, 0.2, 10],
+    "G18": [0.3, 0.5, 0.2, 0.3, 0.2, 0.4, 0.3, 0.2, 0.3, 0],
+    "G19": [0.3, 0.5, 0.2, 0.3, 0.2, 0.5, 0.3, 0.2, 0.2, 10],
+    "J8": [0.3, 0.5, 0.2, 0.5, 0.2, 0.4, 0.3, 0.2, 0.2, 10],
+};
+const galusevCoeff = 1.07;
+const regionCoeff = 1.02;
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const electiveSubjects = document.querySelectorAll('.subjects__elective-container input');
+    electiveSubjects.forEach(subject => {
+      subject.addEventListener('input', function() {
+        let filledSubjects = Array.from(electiveSubjects).filter(input => input.value !== "");
+        electiveSubjects.forEach(input => {
+          if (filledSubjects.length > 0 && !input.value) {
+            input.disabled = true;
+          } else {
+            input.disabled = false;
+          }
+        });
+      });
+    });
+    
+    document.querySelectorAll('input, select').forEach(element => {
+      element.addEventListener('input', getFinalScore);
+    });
+
+    function getFinalScore() {
+      const inputsMandatory = document.querySelectorAll('.subjects__mandatory input[type="number"]');
+      const inputsElective = document.querySelectorAll('.subjects__elective input[type="number"]');
+      const scoreField = document.querySelector('#specialty__score');
+      inputsMandatory.forEach(input => {
+        input.addEventListener('input', function() {
+          if (input.value<100 || input.value>200 || input.value==0) {
+            input.classList.add('empty'); 
+          } else {
+            input.classList.remove('empty');
+          }
+        });
+      });
+      inputsElective.forEach(input => {
+        input.addEventListener('input', () => {
+          const value = parseFloat(input.value);
+
+        if (value >= 100 && value <= 200) {
+          inputsElective.forEach(inp => inp.classList.remove('empty'));
+        }
+        else {
+          inputsElective.forEach(inp => inp.classList.add('empty'));
+        }
+          });
+      });
+      const ukr = parseInt(document.getElementById("ukr").value);
+      const math = parseInt(document.getElementById("math").value);
+      const history = parseInt(document.getElementById("history").value);
+      const foreign = parseInt(document.getElementById("foreign").value);
+      const bio = parseInt(document.getElementById("bio").value);
+      const physics = parseInt(document.getElementById("physics").value);
+      const chemistry = parseInt(document.getElementById("chemistry").value);
+      const literature = parseInt(document.getElementById("literature").value);
+      const geo = parseInt(document.getElementById("geo").value);
+      const coursesSelect = parseInt(document.querySelector(".subjects__select").value);
+      const competition = parseInt(document.getElementById("competition").value);
+      const selectedSpecialty = document.querySelector(".specialty__answer").value;
+      let selectedSubject = [];
+
+      if (!isNaN(foreign) && foreign > 0) {
+        selectedSubject = [foreign, 3];  
+      } else if (!isNaN(bio) && bio > 0) {
+        selectedSubject = [bio, 4];
+      } else if (!isNaN(physics) && physics > 0) {
+        selectedSubject = [physics, 5];
+      } else if (!isNaN(chemistry) && chemistry > 0) {
+        selectedSubject = [chemistry, 6];
+      } else if (!isNaN(literature) && literature > 0) {
+        selectedSubject = [literature, 7];
+      } else if (!isNaN(geo) && geo > 0) {
+        selectedSubject = [geo, 8];
+      }
+      else {
+        selectedSubject = null;
+      };
+
+      const coeff = specialties[selectedSpecialty];
+      const maxCoeff = Math.max(...coeff.slice(3, coeff.length-1));
+      const coursesScore = (coursesSelect===1 ? coeff[9] : 0);
+      const competitionScore = (selectedSpecialty==='B2' ? competition : 0);
+      const competitionCoef = (selectedSpecialty==='B2' ? 0.6 : 0)
+
+      if (selectedSpecialty==='B2') {
+        document.getElementById('competition').removeAttribute('disabled');
+        if (competition<100 || competition>200 || isNaN(competition)) {
+          document.getElementById("competition").classList.add('empty');
+        }
+        else {
+          document.getElementById("competition").classList.remove('empty');
+        }
+      }
+      else {
+        document.querySelector('#competition').setAttribute('disabled', 'disabled');
+        document.getElementById("competition").classList.remove('empty');
+        document.getElementById("competition").value = '';
+      }
+      if (ukr>200 || ukr<100 || math>200 || math<100 || history>200 || history<100 || selectedSubject == null || selectedSubject[0]>200 || selectedSubject[0]<100) {
+
+        scoreField.value = 'Помилка';
+        scoreField.classList.add('error');
+      }
+      else {
+        const resultScore = (((ukr*coeff[0] + math*coeff[1] + history*coeff[2] + selectedSubject[0]*coeff[selectedSubject[1]] + competitionScore*competitionCoef) / (coeff[0]+coeff[1]+coeff[2]+(coeff[selectedSubject[1]] + maxCoeff)/2 + competitionCoef)+coursesScore)*galusevCoeff*regionCoeff).toFixed(3);
+        console.log(resultScore);
+        if (isNaN(resultScore)) {
+          scoreField.value = "Помилка";
+          scoreField.classList.add('error');
+        }
+        else {
+          scoreField.value = resultScore;
+          scoreField.classList.remove('error');
+        }
+      }
+    }
+  });
+
+</script>
+</body> 
+</html>
